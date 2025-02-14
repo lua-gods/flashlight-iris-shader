@@ -70,6 +70,10 @@ void main(){
     float fogStrength = (fogDist - 2.0) * 0.15;
     fogStrength = log(fogStrength * 20.0) * 0.3;
     fogStrength = clamp(fogStrength, 0.0, 1.0);
+    // apply fog
+    #ifdef GRAY_FOG
+    color = mix(color, vec3(color.r + color.g + color.b) * 0.33, fogStrength * (1.0 - vanillaLight * 0.5) * 0.5);
+    #endif
     color = mix(color, vec3(0.15, 0.12, 0.1) + flashlight * 0.02, fogStrength);
     /* DRAWBUFFERS:0 */
     gl_FragData[0] = vec4(color, 1.0f);

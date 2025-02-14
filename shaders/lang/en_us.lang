@@ -1,2 +1,4 @@
 option.FLASHLIGHT_FLICKER = Flashlight Flicker
 option.FLASHLIGHT_FLICKER.comment = Randomly flicker flashlight for spooky effect.
+option.GRAY_FOG.comment = Gray Fog
+option.GRAY_FOG.comment = Make things in fog more gray.
