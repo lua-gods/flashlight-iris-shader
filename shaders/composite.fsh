@@ -41,12 +41,13 @@ void main(){
         (1-(dist / (0.4 + flashlightDepth * 0.02)) * 10.0 + 5.0)
         , 0.0, 1.0
     );
+    flashlight = -(cos(flashlight * 3.1415) - 1.0) * 0.5;
     flashlight = clamp(flashlight +(0.4-(dist / (1 + flashlightDepth * 0.02)) * 3.0 + 0.9) * 0.7 , 0.0, 1.0);
     flashlight = clamp(flashlight +(0.4-(dist / (1 + flashlightDepth * 0.02)) * 1.0 + 0.8) * 0.1 , 0.0, 1.0);
     flashlight *= clamp(1.0 - flashlightDepth * 0.05, 0.0, 1.0);
     flashlight *= sqrt(max(normal.z, 0.0)) * 0.5 + 0.5;
     flashlight *= 2.0;
-    // random turning off
+    // random flickering
     if (abs(rand(floor(frameTimeCounter + 1.0)) * 4.0 - fract(frameTimeCounter)) < 0.25) {
         if (cos(frameTimeCounter * 16.0) > 0.0) {
             flashlight = 0.0;
@@ -58,14 +59,14 @@ void main(){
     vanillaLight *= vanillaLight;
     vanillaLight *= vanillaLight;
     vanillaLight *= vanillaLight;
+    vanillaLight = min(vanillaLight * 1.5, 1.0);
     color *= max(vanillaLight, flashlight);
     // fog
-    float fogDist = depth + dist * 0.5;
-    float fogStrength = clamp((depth + dist * 5.0) * 0.1 - 0.5, 0.0, 1.0);
-    fogStrength = sqrt(fogStrength);
+    float fogDist = depth + dist * 2.0 - vanillaLight * 5.0;
+    float fogStrength = (fogDist - 2.0) * 0.15;
+    fogStrength = log(fogStrength * 20.0) * 0.3;
+    fogStrength = clamp(fogStrength, 0.0, 1.0);
     color = mix(color, vec3(0.15, 0.12, 0.1) + flashlight * 0.02, fogStrength);
     /* DRAWBUFFERS:0 */
     gl_FragData[0] = vec4(color, 1.0f);
-    // gl_FragData[0] = vec4(flashlight, flashlight, flashlight, 1.0f);
-    // gl_FragData[0] = vec4(lightmap, 1.0);
 }
