@@ -12,6 +12,8 @@ uniform float near;
 uniform float far;
 uniform float frameTimeCounter;
 
+#include settings.glsl
+
 float linearizeDepthFast(float depth) {
    return (near * far) / (depth * (near - far) + far);
 }
@@ -48,11 +50,13 @@ void main(){
     flashlight *= sqrt(max(normal.z, 0.0)) * 0.5 + 0.5;
     flashlight *= 2.0;
     // random flickering
-    if (abs(rand(floor(frameTimeCounter + 1.0)) * 4.0 - fract(frameTimeCounter)) < 0.25) {
-        if (cos(frameTimeCounter * 16.0) > 0.0) {
-            flashlight = 0.0;
+    #ifdef FLASHLIGHT_FLICKER
+        if (abs(rand(floor(frameTimeCounter + 1.0)) * 4.0 - fract(frameTimeCounter)) < 0.25) {
+            if (cos(frameTimeCounter * 16.0) > 0.0) {
+                flashlight = 0.0;
+            }
         }
-    }
+    #endif
     // apply light
     // float vanillaLight = max(lightmap.x, lightmap.y * lightmap.z);
     float vanillaLight = lightmap.x;

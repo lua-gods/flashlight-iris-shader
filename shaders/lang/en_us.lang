@@ -1,0 +1,2 @@
+option.FLASHLIGHT_FLICKER = Flashlight Flicker
+option.FLASHLIGHT_FLICKER.comment = Randomly flicker flashlight for spooky effect.
